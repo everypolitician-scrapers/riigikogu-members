@@ -5,8 +5,8 @@ require 'json'
 require 'scraperwiki'
 require 'nokogiri'
 require 'open-uri'
-require 'open-uri/cached'
-OpenURI::Cache.cache_path = '/tmp/open-uri'
+# require 'open-uri/cached'
+# OpenURI::Cache.cache_path = '/tmp/open-uri'
 
 def noko_for(url)
   Nokogiri::HTML(open(url).read)
