@@ -26,16 +26,17 @@ def member_info(url)
   noko = noko_for(url)
   data = { 
     name: noko.css("div.category").text.split(':').last.strip,
-    img: noko.css("img.Picture").attr('src').text,
+    img: 'http://www.riigikogu.ee' + noko.css("img.Picture").attr('src').text,
     faction: noko.xpath("//div[contains(@class, 'Label') and normalize-space(text()) = 'Fraktsioon:']/following-sibling::div/a").text.strip,
     area: noko.xpath("//div[contains(@class, 'Label') and normalize-space(text()) = 'Valimisringkond:']/following-sibling::div").text.strip,
     email: epost(noko.xpath("//div[contains(@class, 'Label') and normalize-space(text()) = 'E-post:']/following-sibling::div/a").text.strip),
   }
   data[:id] = data[:img][/pid=([^&]+)/,1]
-  data[:img].prepend("http://www.riigikogu.ee") if data[:img].start_with? '/'
   return data
 end
 
 member_urls.each do |u|
-  ScraperWiki.save_sqlite([:id], member_info(u))
+  data = member_info(u)
+  puts "Adding #{data[:name]}"
+  ScraperWiki.save_sqlite([:id], data)
 end
