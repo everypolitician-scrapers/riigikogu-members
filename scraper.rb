@@ -27,6 +27,7 @@ def member_info(url)
   name = noko.css("div.category").text.split(':').last.strip
   img  = noko.css("img.Picture").attr('src').text
   id   = img[/pid=([^&]+)/,1]
+  img  = img.prepend("http://www.riigikogu.ee") if img.start_with? '/'
   faction = noko.xpath("//div[contains(@class, 'Label') and normalize-space(text()) = 'Fraktsioon:']/following-sibling::div/a").text.strip
   area = noko.xpath("//div[contains(@class, 'Label') and normalize-space(text()) = 'Valimisringkond:']/following-sibling::div").text.strip
   email = epost(noko.xpath("//div[contains(@class, 'Label') and normalize-space(text()) = 'E-post:']/following-sibling::div/a").text.strip)
