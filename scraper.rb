@@ -24,16 +24,18 @@ end
 
 def member_info(url)
   noko = noko_for(url)
-  name = noko.css("div.category").text.split(':').last.strip
-  img  = noko.css("img.Picture").attr('src').text
-  id   = img[/pid=([^&]+)/,1]
-  img  = img.prepend("http://www.riigikogu.ee") if img.start_with? '/'
-  faction = noko.xpath("//div[contains(@class, 'Label') and normalize-space(text()) = 'Fraktsioon:']/following-sibling::div/a").text.strip
-  area = noko.xpath("//div[contains(@class, 'Label') and normalize-space(text()) = 'Valimisringkond:']/following-sibling::div").text.strip
-  email = epost(noko.xpath("//div[contains(@class, 'Label') and normalize-space(text()) = 'E-post:']/following-sibling::div/a").text.strip)
-  puts "#{id}: #{name} : #{faction} : #{area} : #{email} : #{img}"
+  data = { 
+    name: noko.css("div.category").text.split(':').last.strip,
+    img: noko.css("img.Picture").attr('src').text,
+    faction: noko.xpath("//div[contains(@class, 'Label') and normalize-space(text()) = 'Fraktsioon:']/following-sibling::div/a").text.strip,
+    area: noko.xpath("//div[contains(@class, 'Label') and normalize-space(text()) = 'Valimisringkond:']/following-sibling::div").text.strip,
+    email: epost(noko.xpath("//div[contains(@class, 'Label') and normalize-space(text()) = 'E-post:']/following-sibling::div/a").text.strip),
+  }
+  data[:id] = data[:img][/pid=([^&]+)/,1]
+  data[:img].prepend("http://www.riigikogu.ee") if data[:img].start_with? '/'
+  return data
 end
 
 member_urls.each do |u|
-  member_info(u)
+  puts member_info(u)
 end
