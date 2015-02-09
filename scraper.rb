@@ -25,11 +25,12 @@ end
 def member_info(url)
   noko = noko_for(url)
   name = noko.css("div.category").text.split(':').last.strip
-  img  = noko.css("img.Picture").attr('src')
+  img  = noko.css("img.Picture").attr('src').text
+  id   = img[/pid=([^&]+)/,1]
   faction = noko.xpath("//div[contains(@class, 'Label') and normalize-space(text()) = 'Fraktsioon:']/following-sibling::div/a").text.strip
   area = noko.xpath("//div[contains(@class, 'Label') and normalize-space(text()) = 'Valimisringkond:']/following-sibling::div").text.strip
   email = epost(noko.xpath("//div[contains(@class, 'Label') and normalize-space(text()) = 'E-post:']/following-sibling::div/a").text.strip)
-  puts "#{name} : #{faction} : #{area} : #{email} : #{img}"
+  puts "#{id}: #{name} : #{faction} : #{area} : #{email} : #{img}"
 end
 
 member_urls.each do |u|
