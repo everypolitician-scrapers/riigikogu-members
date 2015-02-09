@@ -37,5 +37,5 @@ def member_info(url)
 end
 
 member_urls.each do |u|
-  puts member_info(u)
+  ScraperWiki.save_sqlite([:id], member_info(u))
 end
